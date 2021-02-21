@@ -12,6 +12,7 @@ This is a project to implement continuous versions of discrete games in python.
 
 * Chess: `chess.py`
 * `sky.py` (Determining what it is is a fun puzzle so I won't spoil it here. The answer is a 4x4 Latin square; the contents of `sky.py` obviously have spoilers.)
+* `skygl.py` (Like the above, but uses OpenGL and is incomplete.)
 * Reversi: `reversi.py`
 * Go: `go.py`
 * Penguin Jrap: `jrap.py` (inspired by [Penguin Trap](https://boardgamegeek.com/boardgame/225981/penguin-trap))
@@ -41,7 +42,9 @@ This is a project to implement continuous versions of discrete games in python.
 
 ## Installation
 
-You will need Python 3.7 or later (for async) and pygame 2.0.0 or later. Everything has been tested in Python 3.8.7 and pygame 2.0.1. The instructions below may not work if your system is different enough from mine (Ubuntu 18.04).
+You will need Python 3.7 or later (for async) and pygame 2.0.1 or later. Everything has been tested in Python 3.8.7 and pygame 2.0.1. The instructions below may not work if your system is different enough from mine (Ubuntu 18.04).
+
+If you want to play `skygl`, you need PyOpenGL 3.1.5 or later and your computer needs to support OpenGL 3.3 or later.
 
 ### Python
 
@@ -50,6 +53,10 @@ You can get Python 3.8 from [Python's website](https://www.python.org/), or, if 
 ### Pygame
 
 Can be installed with pip: `pip install pygame`. If you don't have pip installed, try `python -m pip install pygame`. If you have an older version of `pygame`, use `pip install --upgrade pygame`.
+
+### PyOpenGL
+
+Can be installed as above, replacing `pygame` with `PyOpenGL`.
 
 ### ContinuousEngine
 
