@@ -32,7 +32,7 @@ maybe_broken = [
     [1,1,1,3],
 ]
 
-solution = puzzle6
+solution = puzzle4
 
 # size of instance
 n=len(solution)
