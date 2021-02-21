@@ -8,6 +8,7 @@ ALL_GAMES = {
     'go' : 'Go',
     'jrap' : 'Jrap',
     'sky' : 'Sky',
+    'skygl' : 'Sky',
     }
 
 game_class = lambda name: getattr(importlib.import_module('continuousEngine.games.'+name), ALL_GAMES[name])
@@ -39,7 +40,8 @@ class Game:
         while 1:
             #print("hi",flush=True)
             self.update()
-    def __init__(self,backgroundColor=(245,245,235),center=Point(0,0), spread=5, headless=False,name='continuous engine', timectrl=(None,None)):
+    def __init__(self,backgroundColor=(245,245,235),center=Point(0,0), spread=5, headless=False,name='continuous engine', timectrl=(None,None), gl=False):
+        self.gl = gl
         self.headless = headless
         self.size = lambda: pygame.display.get_window_size()
         self.width = lambda: self.size()[0]
@@ -48,7 +50,10 @@ class Game:
         self.center = center
 
         if not headless:
-            self.screen = pygame.display.set_mode(flags=pygame.RESIZABLE)
+            flags = pygame.RESIZABLE
+            if gl:
+                flags |= pygame.OPENGL | pygame.DOUBLEBUF
+            self.screen = pygame.display.set_mode(flags=flags)
             self.font = pygame.font.Font(pygame.font.match_font(MONO_FONTS),36)
             self.resetView()
         else:
@@ -61,11 +66,14 @@ class Game:
         self.layers = {}
         Background(self, backgroundColor)
 
+        #debug_print = lambda str_, in_: print(str_, in_)
+        debug_print = lambda str_, in_: None
+
         self.handlers = {
             pygame.QUIT: lambda e: sys.exit(),
-            pygame.MOUSEBUTTONDOWN: lambda e: self.click[e.button](e) if e.button in self.click else print('unknown click:',e.button),
-            pygame.MOUSEMOTION: lambda e: ([self.drag[k](e) if k in self.drag else print('unknown motion:',k) for k in range(-1,3) if k<0 or e.buttons[k]]),
-            pygame.KEYDOWN: lambda e: self.keyPress[e.key](e) if e.key in self.keyPress else self.numKey((e.key%1073741864-8)%10) if pygame.K_KP_1<=e.key<=pygame.K_KP_0 or pygame.K_0<=e.key<=pygame.K_9 else print('unknown key:',e.key),
+            pygame.MOUSEBUTTONDOWN: lambda e: self.click[e.button](e) if e.button in self.click else debug_print('unknown click:',e.button),
+            pygame.MOUSEMOTION: lambda e: ([self.drag[k](e) if k in self.drag else debug_print('unknown motion:',k) for k in range(-1,3) if k<0 or e.buttons[k]]),
+            pygame.KEYDOWN: lambda e: self.keyPress[e.key](e) if e.key in self.keyPress else self.numKey((e.key%1073741864-8)%10) if pygame.K_KP_1<=e.key<=pygame.K_KP_0 or pygame.K_0<=e.key<=pygame.K_9 else debug_print('unknown key:',e.key),
             pygame.VIDEORESIZE: lambda e: (setattr(self, 'needViewChange', True), setattr(self, 'needResize', True)),
         }
 
